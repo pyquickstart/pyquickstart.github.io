@@ -19,8 +19,16 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "Course",
-          autogenerate: { directory: "curriculum" },
+          label: "Python QuickStart",
+          link: "/",
+        },
+        {
+          label: "Onboarding",
+          slug: "curriculum/module01",
+        },
+        {
+          label: "Python Basics",
+          slug: "curriculum/module02",
         },
       ],
     }),

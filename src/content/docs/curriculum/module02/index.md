@@ -1,8 +1,8 @@
 ---
-title: Module 02
-description: The second module
+title: Python Basics
+description: All about data types
 ---
 
-# Let's get started
+# Python Basics
 
-This is the second module
+Python is a dynamically typed programming language

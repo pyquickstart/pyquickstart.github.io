@@ -1,8 +1,8 @@
 ---
-title: Module 01
-description: The first module
+title: Onboarding
+description: Configuring GitHub Codespaces as the development environment
 ---
 
-# Welcome to the Python QuickStart
+# Onboarding
 
-This is the first module
+How to configure GitHub Codespaces for Python development
