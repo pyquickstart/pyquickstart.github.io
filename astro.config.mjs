@@ -34,6 +34,10 @@ export default defineConfig({
           label: "Collection Types",
           slug: "curriculum/module03",
         },
+        {
+          label: "Functions",
+          slug: "curriculum/module04",
+        },
       ],
     }),
     markdoc(),
