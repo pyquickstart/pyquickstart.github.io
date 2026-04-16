@@ -93,6 +93,8 @@ The default string representation of a `date` is the four digit year, a hypen, t
 print(timestamp.strftime("%b. %e, %Y"))     # Feb. 20, 2026
 ```
 
+Check out [strftime.net](https://strftime.net) or the Python documentation for a complete list of options when formatting dates and times.
+
 ## Formatting Strings
 
 Displaying the values by themselves is not enough. You need to add context by embedding the variable values in a string. In Python, you can do this by formatting the string with something known as an 'f-string'. Here is an example.
