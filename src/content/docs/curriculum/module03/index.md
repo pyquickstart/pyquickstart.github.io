@@ -18,6 +18,8 @@ transaction = {
 }
 ```
 
+The dictionary is referred to as a colletion type because it contains a collection of values.
+
 Now if we want to add another transaction, we create another dictionary.
 
 ```python
@@ -27,4 +29,51 @@ transaction_2 = {
     "buy": True,
     "timestamp": datetime.date(2026, 21, 2),
 }
+```
+
+## Keys
+
+To retrieve a value within a dictionary, pass the value's key in square brackets.
+
+```python
+print(f"{transaction['amount']} of {transaction['coin']}")  # 0.5 of bitcoin
+```
+
+You can also update a value by assigning a new value to its key.
+
+```python
+transaction["amount"] = 0.6
+```
+
+And you can dynamically add new keys.
+
+```python
+transaction["notes"] = "A transaction for a Bitcoin purchase"
+```
+
+Removing a key is done with the `del` keyword.
+
+```python
+del transaction["notes"]
+```
+
+Attempting to access a key that does not exist will raise an exception.
+
+```python
+print(transaction["notes"])     # raises KeyError
+```
+
+To avoid this, check if the key exists using the `in` keyword
+
+```python
+notes_exist = "notes" in transaction    # False
+```
+
+Combined with an if statement, you can avoid the `KeyError`:
+
+```python
+if "notes" in transaction:
+    print(transaction["notes"])
+else:
+    print("The transaction has no notes")
 ```
