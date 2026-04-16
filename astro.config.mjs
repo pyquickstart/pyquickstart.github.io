@@ -30,6 +30,10 @@ export default defineConfig({
           label: "Python Basics",
           slug: "curriculum/module02",
         },
+        {
+          label: "Collection Types",
+          slug: "curriculum/module03",
+        },
       ],
     }),
     markdoc(),
