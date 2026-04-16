@@ -35,7 +35,7 @@ We also need the amount of the coin being bought or sold. Since you can buy frac
 amount = 0.5
 ```
 
-There is no way to know if this transaction is for a buy or a sell. There are several ways to do this. Since there are only two possible values, buy or sell, we can use the boolean type. The `buy` variables will be `True` if the transaction is a buy, and `False` for a sell.
+There is no way to know if this transaction is for a buy or a sell. There are several ways to do this. Since there are only two possible values, buy or sell, we can use the boolean type. The `buy` variable will be `True` if the transaction is a buy, and `False` for a sell.
 
 ```python
 buy = True
@@ -104,11 +104,11 @@ print(f"Transaction for {amount} {coin} on {timestamp.strftime('%b. %e, %Y')}")
 # Transaction for 0.5 bitcoin on Feb. 20, 2026
 ```
 
-First, it's obviously how the f-string gets its name. The formatted string is prefixed with the letter 'f'. Inside the f-string, Python expressions in curly braces are evaluated and then result inserted into the string. For variables this is the string representation. But you can also call the `strftime` method as well. Notice that the format string passed to `strftime` is single quoted otherwise Python would get confused. You could also have left the format string passed to `strfine` double quoted and single quoted the f-string.
+First, it's obviously how the f-string gets its name. The formatted string is prefixed with the letter 'f'. Inside the f-string, Python expressions in curly braces are evaluated and then result inserted into the string. For variables this is the string representation. But you can also call the `strftime` method as well. Notice that the format string passed to `strftime` is single quoted otherwise Python would get confused. You could also have left the format string passed to `strftime` double quoted and single quoted the f-string.
 
 ## Conditionals
 
-There one more data point we didn't show in the f-string, the `buy` variable. As a boolean the string representation will be either `True` or `False`. And we can do this.
+There is one more data point we didn't show in the f-string, the `buy` variable. As a boolean the string representation will be either `True` or `False`. And we can do this.
 
 ```python
 print(f"{buy} {amount} of {coin} on {timestamp.strftime('%b. %e, %Y')}")
@@ -152,4 +152,4 @@ print(f"{action} {amount} of {coin} on {timestamp.strftime('%b. %e, %Y')}")
 > print(f"{'Bought'if buy == True else 'Sold'} {amount} of {coin} on {timestamp.strftime('%b. %e, %Y')}")
 > ```
 >
-> The standard adminition of "With great power comes great responsibility" applies here. Take care not to get too clever and make your code unreadable.
+> The standard admonition of "With great power comes great responsibility" applies here. Take care not to get too clever and make your code unreadable.

@@ -14,7 +14,7 @@ transaction = {
     "coin": "bitcoin",
     "amount": 0.5,
     "buy": True,
-    "timestamp": datetime.date(2026, 20, 2),
+    "timestamp": datetime.date(2026, 2, 20),
 }
 ```
 
@@ -27,7 +27,7 @@ transaction_2 = {
     "coin": "ethereum",
     "amount": 1.1,
     "buy": True,
-    "timestamp": datetime.date(2026, 21, 2),
+    "timestamp": datetime.date(2026, 2, 21),
 }
 ```
 
@@ -85,7 +85,7 @@ The next piece of the puzzle is how to save all of the transactions in one place
 A Python list is merely a linear collection of valid Python values. The values are separated by commas. The list is surrounded by square brackets.
 
 ```python
-transactions = [transaction, transaction2]
+transactions = [transaction, transaction_2]
 ```
 
 But a Python list is _mutable_ meaning its contents can change. Thus we can add (and remove) values from the list. The `append` method is passed a Python value which is then added to the end of the list.
@@ -164,27 +164,27 @@ for transaction in transactions:
     coin = transaction["coin"]
     amount = transaction["amount"]
     action = "Bought" if transaction["buy"] else "Sold"
-    notes = transaction["notes"] is "notes" in transaction else "No notes found"
+    notes = transaction["notes"] if "notes" in transaction else "No notes found"
 
     print(f"Transaction on {formatted_timestamp}")
     print(f"{action} {amount} of {coin}")
-    print(f"Notes: {notes})
+    print(f"Notes: {notes}")
 ```
 
 If you wanted to use the same code for display a particular transaction, it would be appropriate to do so in a `try`-`except` block to handle the `IndexError`. Attempting to access an index out of bounds is an error.
 
 ```python
 try:
-    transaction = transaction[1]
+    transaction = transactions[1]
     formatted_timestamp = transaction["timestamp"].strftime("%b. %e, %Y")
     coin = transaction["coin"]
     amount = transaction["amount"]
     action = "Bought" if transaction["buy"] else "Sold"
-    notes = transaction["notes"] is "notes" in transaction else "No notes found"
+    notes = transaction["notes"] if "notes" in transaction else "No notes found"
 
     print(f"Transaction on {formatted_timestamp}")
     print(f"{action} {amount} of {coin}")
-    print(f"Notes: {notes})
+    print(f"Notes: {notes}")
 except IndexError:
     print("Transaction not found")
 ```
