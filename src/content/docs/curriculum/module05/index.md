@@ -133,3 +133,28 @@ CryptoTransaction.create(coin="bitcoin", amount=0.25, buy=False)
 ```
 
 The `create` method will create a new instance of the `CryptoTransaction` class with the values assigned to the keyword arguments. It will also insert the instance into the database.
+
+If you are using GitHub Codespaces or Visual Studio Code and installed the SQLite3 Editor extension, you can look inside of the database file. In the Explorer pane, right click on the portfolio.db file. Select Open With. In the Command Palette, select SQLite3 Editor. You'll see a cryptotransaction table with columns for each field in the `CryptoTransaction` class. Notice that Peewee also added a primary key id column for us.
+
+There are three rows in the table. Each one was created from a call to the `create` function. Notice that the date for the timestamp was added automatically. The value for the notes in the second and third rows is NULL because the create call omitted a value and the field is nullable. The buy column in the first two rows is 1 and 0 in the third. SQLite does not support a boolean type so Peewee has mapped the `buy` field to an integer. A value of `True` in the model class is mapped to the integer value 1 and `False` is mapped to 0.
+
+## Retrieving Objects From the Database
+
+The `Model` class from the `peewee` module includes a number of methods to retrieve data from the database. To get all objects from a table, call the `select` method. This will return an instance of `CryptoTransaction` for each row in the table. You can interate over them in a `for` loop.
+
+```python
+for transaction in CryptoTransaction.select():
+    print(transaction)
+```
+
+The default string representation of the `CryptoTransaction` class is the id of the row the instance represent. Add a `__str__` method to return a more detailed string representation.
+
+```python
+class CryptoTransaction(Model):
+    # fields
+
+    def __str__(self):
+        return f"<CryptoTransaction {self.coin} | {self.amount} | {'buy' if self.buy else 'sell'}>"
+```
+
+Run the code again and you'll see the values for each row.
