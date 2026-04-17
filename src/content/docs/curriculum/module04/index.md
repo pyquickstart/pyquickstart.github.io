@@ -71,10 +71,10 @@ for transaction in transactions:
 
 ## Function defaults
 
-The `create_transaction` function can be optimized slightly.  Right now, it has five required parameters.  But does every call require all of them?  For example, most often, the `timestamp` is going to be the current date.  So we don't need to provide the current date every time we call the function.  The `datetime` module from the Python standard library can retrieve a `date` object for the current date with a single line.
+The `create_transaction` function can be optimized slightly. Right now, it has five required parameters. But does every call require all of them? For example, most often, the `timestamp` is going to be the current date. So we don't need to provide the current date every time we call the function. The `datetime` module from the Python standard library can retrieve a `date` object for the current date with a single line.
 
 ```python
-current_date = datetime.datetime.now().date()
+current_date = datetime.date.today()
 ```
 
 This means we can leave out the `timestamp` parameters and assign the current date in the dictionary.
@@ -86,27 +86,27 @@ def create_transaction(coin, amount, buy, notes):
         "amount": amount,
         "buy": buy,
         "notes": notes,
-        "timestamp": datetime.datetime.now().date(),
+        "timestamp": datetime.date.today(),
     }
 
     return transaction
 ```
 
-We can also make some parameters optional by assigning them a default value.  For example, assign the `buy` parameter a default value of `True`.
+We can also make some parameters optional by assigning them a default value. For example, assign the `buy` parameter a default value of `True`.
 
 ```python
 def create_transaction(coin, amount, buy=True):
     # body
 ```
 
-When calling the `create_transaction` function, we can omit a value for the `buy` parameter when creating a transaction buying cryptocurrency and Python will assume it to be `True`.  But if we want to sell a coin, we explicitly pass `False` for the `buy` parameter.
+When calling the `create_transaction` function, we can omit a value for the `buy` parameter when creating a transaction buying cryptocurrency and Python will assume it to be `True`. But if we want to sell a coin, we explicitly pass `False` for the `buy` parameter.
 
 ```python
 buy_transaction = create_transaction("bitcoin", 0.5)
 sell_transaction = create_tranaction("bitcoin", 0.25, False)
 ```
 
-As for the `notes`, they are also optional.  But there doesn't even have to be a `notes` key in the dictionary.  The notes can literally have no value.  We indicate this by assigning the `None` value as the default for the `notes` parameter.  In Python, the `None` value is the null value.  Here is the updated function.
+As for the `notes`, they are also optional. But there doesn't even have to be a `notes` key in the dictionary. The notes can literally have no value. We indicate this by assigning the `None` value as the default for the `notes` parameter. In Python, the `None` value is the null value. Here is the updated function.
 
 ```python
 def create_transaction(coin, amount, buy=True, notes=None):
@@ -114,7 +114,7 @@ def create_transaction(coin, amount, buy=True, notes=None):
         "coin": coin,
         "amount": amount,
         "buy": buy,
-        "timestamp": 
+        "timestamp": datetime.date.today()
     }
 
     if notes is not None:
@@ -123,10 +123,10 @@ def create_transaction(coin, amount, buy=True, notes=None):
     return transaction
 ```
 
-This time, only the required keys are added to the dictionary when it is created.  As the `notes` key is optional, we only add it if the `notes` parameter is not `None`.
+This time, only the required keys are added to the dictionary when it is created. As the `notes` key is optional, we only add it if the `notes` parameter is not `None`.
 
 > Note
-> You might have noticed that the code uses the `is` keyword to determine the value of `notes` and not the equality operator.  This is a subtle point when using `None`.  It is one of the built in values in Python (like `True` and `False`) and is also a singleton.  The `is` keyword checks for object identity to ensure the `notes` parameters refers to the same object.  If the code used the equality operator, depending on how the value being compared is designed, it could give misleading answers.  The `is` keyword is therefore the correct Pythonic usage.
+> You might have noticed that the code uses the `is` keyword to determine the value of `notes` and not the equality operator. This is a subtle point when using `None`. It is one of the built in values in Python (like `True` and `False`) and is also a singleton. The `is` keyword checks for object identity to ensure the `notes` parameters refers to the same object. If the code used the equality operator, depending on how the value being compared is designed, it could give misleading answers. The `is` keyword is therefore the correct Pythonic usage.
 
 We can now simplify the `create_transaction` calls.
 
@@ -148,15 +148,14 @@ To create a sell transaction with notes:
 transaction = create_transaction("bitcoin", 0.25, False, "Selling one quarter bitcoin")
 ```
 
-The last combination, creating a buy transaction with notes requires a little bit different syntax.  In the function call, we must explicitly assign the notes using a keyword argument.
+The last combination, creating a buy transaction with notes requires a little bit different syntax. In the function call, we must explicitly assign the notes using a keyword argument.
 
 ```python
 transaction = create_transaction("bitcoin", 0.5, notes="Buying one half a bitcoin")
 ```
 
-If we left out the `notes` keyword argument, the function would think we were attempting to pass `"Buying one half a bitcoin"` to the `buy` parameter.  You can actually use keyword arguments to pass the values to the parameters in any order.
+If we left out the `notes` keyword argument, the function would think we were attempting to pass `"Buying one half a bitcoin"` to the `buy` parameter. You can actually use keyword arguments to pass the values to the parameters in any order.
 
 ```python
 transaction = create_transaction(amount=0.5, buy=True, notes="Buying one half a bitcoin", coin="bitcoin")
 ```
-
