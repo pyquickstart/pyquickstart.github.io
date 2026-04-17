@@ -50,3 +50,25 @@ print(transaction)  # <CryptoTransaction bitcoin | 0.5 | buy>
 In this module, we will save the transactions to a SQLite database. To make things easier, and more Pythonic, we won't use SQL. Instead we will use an _object relational mapper_ or ORM. And ORM maps the fields in Python classes, called _model classes_, to columns in a relational database table. When retrieving rows from a table, each row is mapped to an instance of a model class. This allows us to circumvent SQL and work only with Python objects.
 
 There are a number of different ORMs that can be used in a Python application. We will use one of the simpler packages, called Peewee.
+
+The Peewee ORM includes a class named `Model`. All model classes that are mapped to database tables must eventually, inherit, or derirve from the `Model` class. When a class inherits another class, it takes on the fields and methods of that class. This allows us to take advantage of the functionality of the `Model` class without having to write it ourselves for each model class.
+
+Before creating a model class we need to install the `peewee` package. At the command line, run
+
+```bash
+pip install peewee
+```
+
+Then import the `Model` class from the `peewee` module.
+
+```python
+from peewee import Model
+```
+
+We can use the `Model` class from Peewee to define the `CryptoTransaction` model class.
+
+```python
+class CryptoTransaction(Model):
+```
+
+By putting the `Model` class in parentheses we are telling Python that `CryptoTransaction` inherits the `Model` class.
