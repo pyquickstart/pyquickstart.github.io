@@ -72,3 +72,64 @@ class CryptoTransaction(Model):
 ```
 
 By putting the `Model` class in parentheses we are telling Python that `CryptoTransaction` inherits the `Model` class.
+
+Now for each column add a field to the class and initialize it with a field class from the `peewee` module.
+
+```python
+import datetime
+from peewee import TextField, FloatField, BooleanField, DateField
+
+class CryptoTransaction(Model):
+    coin = TextField()
+    amount =  FloatField()
+    buy = BooleanField(default=True)
+    timestamp = DateField(default=datetime.date.today)
+    notes = TextField(null=True)
+```
+
+The `default` keyword argument set the default value of the `buy` field to `True` and the default value of the `timestamp` field to the return value of the `datetime.date.today` function. Recall that in the previous module the notes were optional. In a database, we would say the value in nullable. To tell Peewee the notes call be nullable, set the `null` keyword argument to `True`.
+
+## Configuring Peewee
+
+We'll be use SQLite which is a database stored in a local file. The Peewee ORM connects to the database with the `SqliteDatabase` class in the `peewee` module. The `SqliteDatabase` initializer accepts the name of the database file.
+
+```python
+from peewee import SqliteDatabase
+
+db = SqliteDatabase("portfolio.db")
+```
+
+Now we need to associate the `SqliteDatabase` instance with the `CryptoTransaction` model class. Add an inner class to the `CryptoTransaction` class named `Meta` with a single field `database` and assign it the `db` connection.
+
+```python
+class CryptoTransaction(Model):
+    # fields
+    class Meta:
+        database = db
+```
+
+Call the `connect` method to open the connection.
+
+```python
+db.connect()
+```
+
+The database is empty. Tell Peewee to add a table to the database for the `CryptoTransaction` model class by passing it to the `create_tables` method.
+
+```python
+db.create_tables([CryptoTransaction])
+```
+
+The `create_tables` method accepts a list because in a more complex application there might be multiple tables you want to create.
+
+## Inserting Objects Into the Database
+
+The easiest way to insert an object with the Peewee ORM is with the `create` method on the `CryptoTransaction` model class. This is a function inherited by from the `Model` class in the `peewee` module. The `create` method accepts a keyword argument for each field in the `CryptoTransaction` class.
+
+```python
+CryptoTransaction.create(coin="bitcoin", amount=0.5, notes="Initial purchase")
+CryptoTransaction.create(coin="ethereum", amount=1.1)
+CryptoTransaction.create(coin="bitcoin", amount=0.25, buy=False)
+```
+
+The `create` method will create a new instance of the `CryptoTransaction` class with the values assigned to the keyword arguments. It will also insert the instance into the database.
