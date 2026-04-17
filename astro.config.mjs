@@ -10,6 +10,24 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Python QuickStart",
+      head: [
+        {
+          tag: "script",
+          attrs: {
+            async: true,
+            src: "https://www.googletagmanager.com/gtag/js?id=G-K5K0NBFJ4M",
+          },
+        },
+        {
+          tag: "script",
+          content: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX');
+          `,
+        },
+      ],
       social: [
         {
           icon: "github",
