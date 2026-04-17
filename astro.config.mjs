@@ -38,6 +38,10 @@ export default defineConfig({
           label: "Functions",
           slug: "curriculum/module04",
         },
+        {
+          label: "Databases",
+          slug: "curriculum/module05",
+        },
       ],
     }),
     markdoc(),
