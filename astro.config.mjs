@@ -60,6 +60,10 @@ export default defineConfig({
           label: "Databases",
           slug: "curriculum/module05",
         },
+        {
+          label: "Retrieving Data",
+          slug: "curriculum/module06",
+        },
       ],
     }),
     markdoc(),
