@@ -1,9 +1,7 @@
 ---
-title: Retrieving Data from the Web
+title: Retrieving Data from CoinGecko
 description: Use the `requests` package to get coin prices from CoinGecko
 ---
-
-# Retrieving Data from CoinGecko
 
 Our cryptocurrency portfolio manager has one major omission. There is no way to evaluate the value of the portfolio. Cryptocurrency prices are constantly changing so we need to be able to retrieve current values. CoinGecko is a company that provides such data, and you can get started for free!
 
@@ -18,7 +16,7 @@ Your API key is like a password, so it needs to be stored securely. In productio
 First install the `python-dotenv` package.
 
 ```bash
-pip install python-dotenv
+$ pip install python-dotenv
 ```
 
 In the code, add two `import` statements. The first one imports a function from the `dotenv` module to load the values from a file.
@@ -49,4 +47,73 @@ print(coingecko_api_key[-4:])
 
 ## Making HTTP Requests
 
-To retrieve the prices, you'll make an HTTP request to a CoinGecko API endpoint. One of the most popular Python packages, `requests`, promotes itself as "HTTP for Humans" meaning it makes handling HTTP traffic and data simple. Often it's just a few lines of code.
+To retrieve the prices, you'll make an HTTP request to a CoinGecko API endpoint. One of the most popular Python packages, `requests`, promotes itself as "HTTP for Humans" meaning it makes handling HTTP traffic and data simple. Often it's just a few lines of code.  First, install the `requests` package.
+
+```bash
+$ pip install requests
+```
+
+Next, import the `requests` module in the code.
+
+```python
+import requests
+```
+
+The CoinGecko API endpoint to retrieve the price of a coin is: `https://api.coingecko.com/api/v3/simple/price`.  The endpoint expects three key/value pairs in the query string:
+
+- `vs_currencies` - A comma separated list of abbreviated currencies (ie. 'USD' for US dollars) to convert the price
+- `ids` - A comma separated list of coins (ie. 'bitcoin')
+- `x_cg_demo_api_key` - The CoinGecko API you created and store in an environment variable
+
+Using a f-string, it's easy to construct an endpoint to get the price of Bitcoin in US dollars.
+
+```python
+currency = "USD"
+coin = "bitcoin"
+url = f"https://api.coingecko.com/api/v3/simple/price?vs_currencies={currency}&ids={coin}&x_cg_demo_api_key={coingecko_api_key}
+```
+
+To get the data back from the API, make an HTTP GET request by passing the `url` to the `get` function in the `requests` module.  This returns an object for the HTTP response.  Check the response `status_code`.  If it's 200 then the request succeeded.  The CoinGecko API will return the data in JSON format.  For the `url` we created, the JSON would look like this (the actual price will vary)
+
+```json
+{'bitcoin': {'usd': 75438}}
+```
+
+You could use the `json` module in the Python standard library to parse the JSON into a Python dictionary.  However, the response object will do it for you by calling the `json` method.  Then you can drill down to the price with the `bitcoin` and `usd` keys.
+
+```python
+response = requests.get(url)
+if response.status_code == 200:
+    data = response.json()
+    price = data["bitcoin"]["usd"]
+    print(f"The current price of {coin} is {price} {currency}")
+else:
+    print("Could not get any data.")
+```
+
+To retrieve multiple coins in multiple currencies, you need to pass `vs_currencies` and/or `ids` a comma separated list.  The Python string has a `join` method that accepts a Python `list` returning a string of the values in the list, separated by the string `join` was called on.  This makes it simple to construct comma separated lists for the CoinGecko API.
+
+```python
+coins = ["bitcoin", "ethereum"]
+currencies = ["USD", "GBP"]
+base_url = "https://api.coingecko.com/api/v3/simple/price"
+qs = f"?vs_currencies={','.join(currencies)}&ids={','.join(coins)}&x_cg_demo_api_key={coingecko_api_key}"
+response = requests.get(base_url + qs)  # the '+' operator concatenates two strings
+```
+
+The JSON for this requests looks like
+
+```json
+{
+    'bitcoin': {
+        'usd': 75387, 
+        'gbp': 55683
+    }, 
+    'ethereum': {
+        'usd': 2304.97, 
+        'gbp': 1702.52
+    }
+}
+```
+
+The JSON object includes a key for each coin.  The value for each coin is another JSON object with a key for each currency.  The `json` method of the response object returns this data in a Python dictionary.  Drill down into the keys to get the values needed.
