@@ -70,7 +70,7 @@ Using a f-string, it's easy to construct an endpoint to get the price of Bitcoin
 ```python
 currency = "USD"
 coin = "bitcoin"
-url = f"https://api.coingecko.com/api/v3/simple/price?vs_currencies={currency}&ids={coin}&x_cg_demo_api_key={coingecko_api_key}
+url = f"https://api.coingecko.com/api/v3/simple/price?vs_currencies={currency}&ids={coin}&x_cg_demo_api_key={coingecko_api_key}"
 ```
 
 To get the data back from the API, make an HTTP GET request by passing the `url` to the `get` function in the `requests` module.  This returns an object for the HTTP response.  Check the response `status_code`.  If it's 200 then the request succeeded.  The CoinGecko API will return the data in JSON format.  For the `url` we created, the JSON would look like this (the actual price will vary)
@@ -86,7 +86,7 @@ response = requests.get(url)
 if response.status_code == 200:
     data = response.json()
     price = data["bitcoin"]["usd"]
-    print(f"The current price of {coin} is {price} {currency}")
+    print(f"The current price of {coin.capitalize()} is {price} {currency}")
 else:
     print("Could not get any data.")
 ```
@@ -117,3 +117,64 @@ The JSON for this requests looks like
 ```
 
 The JSON object includes a key for each coin.  The value for each coin is another JSON object with a key for each currency.  The `json` method of the response object returns this data in a Python dictionary.  Drill down into the keys to get the values needed.
+
+```python
+if response.status_code == 200:
+    data = response.json()
+    for coin in data.keys():  # the keys of the response JSON are the coins
+        for currency in data[
+            coin
+        ].keys():  # each coin key has a JSON object with the currencies as keys
+            price = data[coin][currency]
+            print(
+                f"The current price of {coin.capitalize()} in {currency.upper()} is {price}"
+            )
+else:
+    print("Could not get any data.")
+```
+
+## Getting the Portfolio Value
+
+In the previous module, you saw how to store transactions in a SQLite database with the PeeWee ORM in the `peewee` package.  Recalling that knowledge, assume we have the following transactions:
+
+```python
+CryptoTransaction.create(coin="bitcoin", amount=0.5, notes="Initial purchase")
+CryptoTransaction.create(coin="ethereum", amount=1.1)
+CryptoTransaction.create(coin="bitcoin", amount=0.25, buy=False)
+```
+
+This code represents:
+
+- A **buy** of **0.5** **Bitcoin**
+- A **buy** of **1.1** **Ethereum**
+- A **sell** of **0.25** **Bitcoin**
+
+The total amounts of the portfolio should be:
+
+- 0.25 Bitcoin
+- 1.1 Ethereum
+
+We can get all of the transactions in the database, and iterate over them:
+
+```python
+for transaction in CryptoTransaction.select():
+    # get amounts
+```
+
+Using the `Counter` class from the `collections` module in the Python standard library, we can keep track of the total amounts in the portfolio:
+
+```python
+from collections import Counter
+
+coin_counts = Counter()
+
+for transaction in CryptoTransaction.select():
+    if transaction.buy == True:
+        coin_counts[transaction.coin] += transaction.amount
+    else:
+        coin_counts[transaction.coin] -= transaction.amount
+```
+
+The `Counter` class is like a dictionary except accessing a non-existent key will not raise a `KeyError`.  Instead, it will add the key to the `Counter`.  Since we are only interested in the final totals, the order of the transactions is not important for this case.
+
+Iterate over the `coin_counts` and query CoinGecko for the price of each coin and multiply it by the amount.
