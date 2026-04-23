@@ -47,7 +47,7 @@ print(coingecko_api_key[-4:])
 
 ## Making HTTP Requests
 
-To retrieve the prices, you'll make an HTTP request to a CoinGecko API endpoint. One of the most popular Python packages, `requests`, promotes itself as "HTTP for Humans" meaning it makes handling HTTP traffic and data simple. Often it's just a few lines of code.  First, install the `requests` package.
+To retrieve the prices, you'll make an HTTP request to a CoinGecko API endpoint. One of the most popular Python packages, `requests`, promotes itself as "HTTP for Humans" meaning it makes handling HTTP traffic and data simple. Often it's just a few lines of code. First, install the `requests` package.
 
 ```bash
 $ pip install requests
@@ -59,7 +59,7 @@ Next, import the `requests` module in the code.
 import requests
 ```
 
-The CoinGecko API endpoint to retrieve the price of a coin is: `https://api.coingecko.com/api/v3/simple/price`.  The endpoint expects three key/value pairs in the query string:
+The CoinGecko API endpoint to retrieve the price of a coin is: `https://api.coingecko.com/api/v3/simple/price`. The endpoint expects three key/value pairs in the query string:
 
 - `vs_currencies` - A comma separated list of abbreviated currencies (ie. 'USD' for US dollars) to convert the price
 - `ids` - A comma separated list of coins (ie. 'bitcoin')
@@ -73,13 +73,13 @@ coin = "bitcoin"
 url = f"https://api.coingecko.com/api/v3/simple/price?vs_currencies={currency}&ids={coin}&x_cg_demo_api_key={coingecko_api_key}"
 ```
 
-To get the data back from the API, make an HTTP GET request by passing the `url` to the `get` function in the `requests` module.  This returns an object for the HTTP response.  Check the response `status_code`.  If it's 200 then the request succeeded.  The CoinGecko API will return the data in JSON format.  For the `url` we created, the JSON would look like this (the actual price will vary)
+To get the data back from the API, make an HTTP GET request by passing the `url` to the `get` function in the `requests` module. This returns an object for the HTTP response. Check the response `status_code`. If it's 200 then the request succeeded. The CoinGecko API will return the data in JSON format. For the `url` we created, the JSON would look like this (the actual price will vary)
 
 ```json
-{'bitcoin': {'usd': 75438}}
+{ "bitcoin": { "usd": 75438 } }
 ```
 
-You could use the `json` module in the Python standard library to parse the JSON into a Python dictionary.  However, the response object will do it for you by calling the `json` method.  Then you can drill down to the price with the `bitcoin` and `usd` keys.
+You could use the `json` module in the Python standard library to parse the JSON into a Python dictionary. However, the response object will do it for you by calling the `json` method. Then you can drill down to the price with the `bitcoin` and `usd` keys.
 
 ```python
 response = requests.get(url)
@@ -91,7 +91,7 @@ else:
     print("Could not get any data.")
 ```
 
-To retrieve multiple coins in multiple currencies, you need to pass `vs_currencies` and/or `ids` a comma separated list.  The Python string has a `join` method that accepts a Python `list` returning a string of the values in the list, separated by the string `join` was called on.  This makes it simple to construct comma separated lists for the CoinGecko API.
+To retrieve multiple coins in multiple currencies, you need to pass `vs_currencies` and/or `ids` a comma separated list. The Python string has a `join` method that accepts a Python `list` returning a string of the values in the list, separated by the string `join` was called on. This makes it simple to construct comma separated lists for the CoinGecko API.
 
 ```python
 coins = ["bitcoin", "ethereum"]
@@ -105,18 +105,18 @@ The JSON for this requests looks like
 
 ```json
 {
-    'bitcoin': {
-        'usd': 75387, 
-        'gbp': 55683
-    }, 
-    'ethereum': {
-        'usd': 2304.97, 
-        'gbp': 1702.52
-    }
+  "bitcoin": {
+    "usd": 75387,
+    "gbp": 55683
+  },
+  "ethereum": {
+    "usd": 2304.97,
+    "gbp": 1702.52
+  }
 }
 ```
 
-The JSON object includes a key for each coin.  The value for each coin is another JSON object with a key for each currency.  The `json` method of the response object returns this data in a Python dictionary.  Drill down into the keys to get the values needed.
+The JSON object includes a key for each coin. The value for each coin is another JSON object with a key for each currency. The `json` method of the response object returns this data in a Python dictionary. Drill down into the keys to get the values needed.
 
 ```python
 if response.status_code == 200:
@@ -135,7 +135,7 @@ else:
 
 ## Getting the Portfolio Value
 
-In the previous module, you saw how to store transactions in a SQLite database with the PeeWee ORM in the `peewee` package.  Recalling that knowledge, assume we have the following transactions:
+In the previous module, you saw how to store transactions in a SQLite database with the PeeWee ORM in the `peewee` package. Recalling that knowledge, assume we have the following transactions:
 
 ```python
 CryptoTransaction.create(coin="bitcoin", amount=0.5, notes="Initial purchase")
@@ -175,6 +175,23 @@ for transaction in CryptoTransaction.select():
         coin_counts[transaction.coin] -= transaction.amount
 ```
 
-The `Counter` class is like a dictionary except accessing a non-existent key will not raise a `KeyError`.  Instead, it will add the key to the `Counter`.  Since we are only interested in the final totals, the order of the transactions is not important for this case.
+The `Counter` class is like a dictionary except accessing a non-existent key will not raise a `KeyError`. Instead, it will add the key to the `Counter`. Since we are only interested in the final totals, the order of the transactions is not important for this case.
 
 Iterate over the `coin_counts` and query CoinGecko for the price of each coin and multiply it by the amount.
+
+```python
+for coin, amount in coin_amounts.items():
+    response = requests.get(f"https://api.coingecko.com/api/v3/simple/price?vs_currencies={currency}&ids={coin}&x_cg_demo_api_key={coingecko_api_key}")
+    data = response.json()
+    price = data[coin][currency]
+    value = amount * price
+    print(f"\t{amount} {coin.capitalize()}, Current Value: {value:.2f} {currency.upper()}")
+```
+
+The output will look something like this: (values will vary)
+
+```
+Current Portfolio:
+        0.25 Bitcoin, Current Value: 19572.50 USD
+        1.1 Ethereum, Current Value: 2568.56 USD
+```
