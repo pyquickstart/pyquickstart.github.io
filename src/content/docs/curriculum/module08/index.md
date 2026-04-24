@@ -5,11 +5,11 @@ description: Organize the application into modules and format the output with th
 
 ## Modules
 
-In the previous modules, you've use a number of Python modules.  Some have been from the Python standard library while other were from 3rd party packages you installed with `pip`.  But you can also make your own modules.  You actually already have, and might not even realized it!
+In the previous modules, you've use a number of Python modules. Some have been from the Python standard library while other were from 3rd party packages you installed with `pip`. But you can also make your own modules. You actually already have, and might not even realized it!
 
-Every time you make a Python file, that file can be treated like a module.  All you have to do is import a module that is the same name as the file, without the extension.  Let's take a closer look.
+Every time you make a Python file, that file can be treated like a module. All you have to do is import a module that is the same name as the file, without the extension. Let's take a closer look.
 
-The code to access the current prices with CoinGecko has no dependencies on the rest of the application code.  Therefore, along with its own dependencies, that code can be moved to a different file and thus a different module. Call it `coingecko.py`
+The code to access the current prices with CoinGecko has no dependencies on the rest of the application code. Therefore, along with its own dependencies, that code can be moved to a different file and thus a different module. Call it `coingecko.py`
 
 ```python
 # coingecko.py
@@ -31,14 +31,14 @@ def get_current_price(coins, currency="usd"):
     return response.json()
 ```
 
-This will raise errors in the main file, `manager.py` because the `get_current_price` function is called but no definition can be found.  To solve this, import the `get_current_price` function from the `coingecko` module.
+This will raise errors in the main file, `manager.py` because the `get_current_price` function is called but no definition can be found. To solve this, import the `get_current_price` function from the `coingecko` module.
 
 ```python
 # in manager.py
 from coingecko import get_current_price
 ```
 
-You can do the same thing with the database code.  Move it into a file called `db.py`.
+You can do the same thing with the database code. Move it into a file called `db.py`.
 
 ```python
 # db.py
@@ -81,7 +81,7 @@ And in `manaager.py` import the `CryptoTransaction` class from the `db` module.
 from db import CryptoTransaction
 ```
 
-A word should be said about organization.  As a application grows, so will the number of modules used.  The Python interpreter does not care what order these are placed in.  It only worries about them being referenced.  However, for those who might see your code in the future, including yourself, there is a consensus on how to organize module imports in a Python application.
+A word should be said about organization. As a application grows, so will the number of modules used. The Python interpreter does not care what order these are placed in. It only worries about them being referenced. However, for those who might see your code in the future, including yourself, there is a consensus on how to organize module imports in a Python application.
 
 Think of modules in three categories:
 
@@ -89,7 +89,7 @@ Think of modules in three categories:
 - Installed 3rd party modules (ie. `requests`)
 - Modules you created (ie. `coingecko`)
 
-The imports should be arranged in that order: Python standard library first, then 3rd party modules and finally those you created for the application.  In addition generic module imports such as `import Typer` should be included before more specific imports.  The imports for `manager.py` would like like this:
+The imports should be arranged in that order: Python standard library first, then 3rd party modules and finally those you created for the application. In addition generic module imports such as `import Typer` should be included before more specific imports. The imports for `manager.py` would like like this:
 
 ```python
 import typer
@@ -102,4 +102,14 @@ from db import CryptoTransaction
 from coingecko import get_current_price
 ```
 
-There are no imports from the Python standard library after separating the code into modules.  If there were it would come before the `import Typer` line.
+There are no imports from the Python standard library after separating the code into modules. If there were it would come before the `import Typer` line.
+
+## Formatting with `rich`
+
+A common issue with CLI applications is the output is .. boring. The lack of style and formatting can also make it difficult to read. By applying color and using ASCII characters to create "widgets" it can make applications much easier and useful. Python apps can leverage the `rich` package to do all of this and more.
+
+First install the `rich` package.
+
+```bash
+$ pip install rich
+```
