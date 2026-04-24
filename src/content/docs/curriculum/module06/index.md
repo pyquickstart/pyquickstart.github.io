@@ -91,7 +91,7 @@ else:
     print("Could not get any data.")
 ```
 
-To retrieve multiple coins in multiple currencies, you need to pass `vs_currencies` and/or `ids` a comma separated list. The Python string has a `join` method that accepts a Python `list` returning a string of the values in the list, separated by the string `join` was called on. This makes it simple to construct comma separated lists for the CoinGecko API.
+The demo API is restricted in the number of total requests per month (10K) and the number of requests per minute (30). To stay within these limits, it can be helpful to query the API for multiple keys and/or currencies in one request. this is done by passing `vs_currencies` and/or `ids` a comma separated list. The Python string has a `join` method that accepts a Python `list` returning a string of the values in the list, separated by the string `join` was called on. This makes it simple to construct comma separated lists for the CoinGecko API.
 
 ```python
 coins = ["bitcoin", "ethereum"]

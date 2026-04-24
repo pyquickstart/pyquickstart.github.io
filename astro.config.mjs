@@ -64,6 +64,10 @@ export default defineConfig({
           label: "Retrieving Data",
           slug: "curriculum/module06",
         },
+        {
+          label: "CLI Applications",
+          slug: "curriculum/module07",
+        },
       ],
     }),
     markdoc(),
