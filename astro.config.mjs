@@ -68,6 +68,10 @@ export default defineConfig({
           label: "CLI Applications",
           slug: "curriculum/module07",
         },
+        {
+          label: "Formatting Output",
+          slug: "curriculum/module08",
+        }
       ],
     }),
     markdoc(),
