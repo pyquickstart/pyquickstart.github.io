@@ -34,8 +34,8 @@ def get_current_price(coins, currency="usd"):
 This will raise errors in the main file, `manager.py` because the `get_current_price` function is called but no definition can be found. To solve this, import the `get_current_price` function from the `coingecko` module.
 
 ```python
-# in manager.py
-from coingecko import get_current_price
+# manager.py
+ from coingecko import get_current_price
 ```
 
 You can do the same thing with the database code. Move it into a file called `db.py`.
@@ -76,7 +76,7 @@ db.create_tables([CryptoTransaction])
 And in `manaager.py` import the `CryptoTransaction` class from the `db` module.
 
 ```python
-# in manager.py
+# manager.py
 
 from db import CryptoTransaction
 ```
