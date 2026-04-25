@@ -113,3 +113,35 @@ First install the `rich` package.
 ```bash
 $ pip install rich
 ```
+
+The simplest way to format text using `rich` is the `print` function.
+
+```python
+from rich import print
+```
+
+> **Note**
+>
+> This will clobber the built-in Python `print` function.  It's usually not a problem as the `rich` `print` function does everything the built-in Python `print` function can.  The `rich` function supports the the `rich` console markup as you'll see next.  You can alias the `rich` function if you really want to keep the two separate.
+
+## Console markup
+
+To add color and style to your CLI application output the `print` function can render console markup.  This is similar to HTML tags except with square brackets instead of angles.  The following code will render the the coin name as blue in the output.
+
+```python
+print(f"The current price of [blue]{coin.capitalize()}[/blue] is {price} {currency}")
+```
+
+You can also add style.  Let's make the price of the coin bold green.
+
+```python
+print(
+    f"The current price of [blue]{coin.capitalizer()}[/blue] is [bold green]{price} {currency}[/bold green]"
+)
+```
+
+You can omit the closing tag and the style will be applied to the rest of the string.  You can also use a single slash to close the tag like this `[blue]Blue Text[/] other color text`
+
+> **Note**
+>
+> The order of the color and styles is irrevelant.  Instead of `[bold green]` you could have added `[green bold]`.  If you include a closing tag, the order must be the same in both the opening and closing tags.
