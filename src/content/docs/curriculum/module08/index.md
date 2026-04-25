@@ -5,11 +5,11 @@ description: Organize the application into modules and format the output with th
 
 ## Modules
 
-In the previous modules, you've use a number of Python modules. Some have been from the Python standard library while other were from 3rd party packages you installed with `pip`. But you can also make your own modules. You actually already have, and might not even realized it!
+In the previous modules, you used a number of Python modules. Some have been from the Python standard library while others were from 3rd party packages installed with `pip`. But you can also make your own modules. You actually already have, possibly without realizing it!
 
-Every time you make a Python file, that file can be treated like a module. All you have to do is import a module that is the same name as the file, without the extension. Let's take a closer look.
+Every time you make a Python file, that file can be treated like a module. All you have to do is import a module of the same name as the file, without the extension. Let's take a closer look.
 
-The code to access the current prices with CoinGecko has no dependencies on the rest of the application code. Therefore, along with its own dependencies, that code can be moved to a different file and thus a different module. Call it `coingecko.py`
+The code to access the current prices with CoinGecko has no dependencies on the rest of the application code. Therefore that code, along with its own dependencies, can be moved to a different file and thus a different module. Call it `coingecko.py`
 
 ```python
 # coingecko.py
@@ -81,7 +81,7 @@ And in `manaager.py` import the `CryptoTransaction` class from the `db` module.
 from db import CryptoTransaction
 ```
 
-A word should be said about organization. As a application grows, so will the number of modules used. The Python interpreter does not care what order these are placed in. It only worries about them being referenced. However, for those who might see your code in the future, including yourself, there is a consensus on how to organize module imports in a Python application.
+A word should be said about organization. As an application grows, so will the number of modules used. The Python interpreter does not care about the order of the modules. It only cares that they are imported. However, for those who might see your code in the future - including yourself - there is a consensus from the PEP-8 style on how to organize module imports in a Python application.
 
 Think of modules in three categories:
 
@@ -104,9 +104,11 @@ from coingecko import get_current_price
 
 There are no imports from the Python standard library after separating the code into modules. If there were it would come before the `import Typer` line.
 
+In addition to organizing the module imports, PEP-8 also recommends all imports be placed at the top of the top of the file.
+
 ## Formatting with `rich`
 
-A common issue with CLI applications is the output is .. boring. The lack of style and formatting can also make it difficult to read. By applying color and using ASCII characters to create "widgets" it can make applications much easier and useful. Python apps can leverage the `rich` package to do all of this and more.
+A common issue with CLI applications is the output can be ... boring. The lack of style and formatting can also make it difficult to read and visually parse the output. By applying colors and using ASCII characters to create "widgets" applications become much easier to use and understand. Python apps can leverage the `rich` package to do all of this and more.
 
 First install the `rich` package.
 
@@ -122,26 +124,98 @@ from rich import print
 
 > **Note**
 >
-> This will clobber the built-in Python `print` function.  It's usually not a problem as the `rich` `print` function does everything the built-in Python `print` function can.  The `rich` function supports the the `rich` console markup as you'll see next.  You can alias the `rich` function if you really want to keep the two separate.
+> This will clobber the built-in Python `print` function. It's usually not a problem as the `rich` `print` function does everything the built-in Python `print` function can. The `rich` function supports the the `rich` console markup as you'll see next. You can alias the `rich` function if you really want to keep the two separate.
 
 ## Console markup
 
-To add color and style to your CLI application output the `print` function can render console markup.  This is similar to HTML tags except with square brackets instead of angles.  The following code will render the the coin name as blue in the output.
+To add color and style to your CLI application output the `print` function can render console markup. This is similar to HTML tags except with square brackets instead of angles. The following code will render the the coin name as blue in the output.
 
 ```python
-print(f"The current price of [blue]{coin.capitalize()}[/blue] is {price} {currency}")
+print(f"Added transaction: [blue]{'Bought' if not sell else 'Sold'}[/blue] {amount} {coin.capitalize()}")
 ```
 
-You can also add style.  Let's make the price of the coin bold green.
+You can also add style. Let's make the price of the coin bold green.
 
 ```python
 print(
-    f"The current price of [blue]{coin.capitalizer()}[/blue] is [bold green]{price} {currency}[/bold green]"
+    f"Added transaction: [blue]{'Bought' if not sell else 'Sold'}[/blue] [bold green]{amount}[/bold green] {coin.capitalize()}"
 )
 ```
 
-You can omit the closing tag and the style will be applied to the rest of the string.  You can also use a single slash to close the tag like this `[blue]Blue Text[/] other color text`
+You can omit the closing tag and the style will be applied to the rest of the string. You can also use a single slash to close the tag like this `[blue]blue text[/] other color text`
 
 > **Note**
 >
-> The order of the color and styles is irrevelant.  Instead of `[bold green]` you could have added `[green bold]`.  If you include a closing tag, the order must be the same in both the opening and closing tags.
+> The order of the color and styles is irrevelant. Instead of `[bold green]` you could have used `[green bold]`. If you include a closing tag, the order of the colors and styles must be the same in both the opening and closing tags.
+
+## Constructing formatted text
+
+It might not always be convenient to include all markup and content in a string all at once. There are times, especially in larger applications where it makes more sense to construct a formatted string in stages depending on the state of the application. This is where the `Text` class from the `rich.text` module comes in. Used in conjunction with the `Console` class from the `rich.console` module, you can programmatically construct and render formatted text.
+
+First import the required classes:
+
+```python
+from rich.console import Console
+from rich.text import Text
+```
+
+Let's add a new command to the `manager.py` file to lookup the current price of a coin optionally in a specific currency.
+
+```python
+@app.command("lookup")
+def lookup_price(coin: str, currency: Annotated[str, typer.Option("--currency", "-c")] = "usd"):
+    price_data = get_current_price([coin], currency)
+    if coin in price_data:
+        price = price_data[coin][currency]
+        print(f"Price data for {coin.capitalize()}: {price:.2f} {currency.upper()}")
+    else:
+        print(f"Price data for {coin.capitalize()}: Not found.")
+```
+
+Regardless of whether the coin is found, the first part of the output remains the same. We can put that in a `Text` object.
+
+```python
+output = Text(f"Price data for ")
+```
+
+Now let's `append` another string with the name of the coin and use the `style` keyword argument to render it with the color blue.
+
+```python
+output = Text(f"Price data for ")
+output.append(coin.capitalize(), style="blue")
+```
+
+The remainder of the text depends on the outcome of the `if` statment. When the coin is found and price data is available, we display it. Otherwise, show an error.
+
+```python
+output = Text(f"Price data for ")
+output.append(coin.capitalize(), style="blue")
+if coin in price_data:
+    price = price_data[coin][currency]
+    output.append(f"{price:.2f} {currency.upper()}", style="bold green")
+else:
+    output.append("not found", style="bold red")
+```
+
+To display the rendered text, create an instance of the `Console` class and call the `print` method.
+
+```python
+console = Console()
+console.print(output)
+```
+
+The command
+
+```bash
+python manager.py lookup bitcoin -c gbp
+```
+
+Will display the price of Bitcoin in Great British pounds in bold green text.
+
+The command
+
+```bash
+python manager.py lookup nullcoin -c gbp
+```
+
+Will display "not found" in bold red text.
