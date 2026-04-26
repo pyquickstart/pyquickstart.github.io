@@ -131,7 +131,9 @@ from rich import print
 To add color and style to your CLI application output the `print` function can render console markup. This is similar to HTML tags except with square brackets instead of angles. The following code will render the the coin name as blue in the output.
 
 ```python
-print(f"Added transaction: [blue]{'Bought' if not sell else 'Sold'}[/blue] {amount} {coin.capitalize()}")
+print(
+    f"Added transaction: [blue]{'Bought' if not sell else 'Sold'}[/blue] {amount} {coin.capitalize()}"
+)
 ```
 
 You can also add style. Let's make the price of the coin bold green.
@@ -163,7 +165,9 @@ Let's add a new command to the `manager.py` file to lookup the current price of 
 
 ```python
 @app.command("lookup")
-def lookup_price(coin: str, currency: Annotated[str, typer.Option("--currency", "-c")] = "usd"):
+def lookup_price(
+    coin: str, currency: Annotated[str, typer.Option("--currency", "-c")] = "usd"
+):
     price_data = get_current_price([coin], currency)
     if coin in price_data:
         price = price_data[coin][currency]
@@ -219,3 +223,106 @@ python manager.py lookup nullcoin -c gbp
 ```
 
 Will display "not found" in bold red text.
+
+## Tables
+
+The `rich` package implements a number of "UI widgets" rendered using ASCII special characters.  These include panels, tree views and tables which would be useful when displaying the total values of the portfolio.
+
+The `Table` class is in the `rich.table` module so that needs to be imported.
+
+```python
+from rich.table import Table
+```
+
+In the `show_portfolio` function, before the call to `get_current_price`, create a new `Table` object and pass the initializer the `title` keyword argument`
+
+```python
+table = Table(title="Current Portfolio")
+```
+
+The table will have three columns: 
+
+- Coin
+- Amount
+- Current Value
+
+For each column, call the `add_column` method on the `table`.  The first parameter to `add_column` is the header for the column.  You can style the content of the column with the `style` keyword argument.
+
+```python
+table.add_column("Coin", style="cyan")
+table.add_column("Amount", style="green")
+table.add_column("Current Value", style="magenta")
+```
+
+At the end of the `for` loop body, call the `add_row` method on the `table` with a value for each column in the `table`.
+
+```python
+table.add_row(coin.capitalize(), f"{amount}", f"{value:.2f} {currency.upper()}")
+```
+
+At the end of the `show_portfolio` function, create a `Console` instance and use the `print` method to render the `table`.
+
+```python
+console = Console()
+console.print(table)
+```
+
+Now the command 
+
+```bash
+python manager.py portfolio
+```
+
+Shows the total values of each coin in the portfolio in an easy to read table.
+
+It would also be useful to add a row at the bottom of the `table` to show the total value of the portfolio. But we don't want to format it the same as the other rows.  Also, we can distinguish it from the other rows by placing it in a new section by calling the `add_section` method after the `for` loop.
+
+```python
+table.add_section()
+```
+
+Now add the row with the `add_row` method.  This row will only have values in the first and third columns so put an empty string in the second column.  Override the styles defined earlier in the `add_column` methods with console markup.
+
+```python
+table.add_row(
+    "[bold white]TOTAL[/]",  # unused column
+    f"[bold yellow]{total_value:.2f} {currency.upper()}[/]",
+)
+```
+
+To compute the `total_value` first initialize it to `0.0` before the `for` loop.  Then at the end of the `for` loop body, add the value of the coin just computed to the `total_value` variable.  The revised `show_portfolio` function looks like this:
+
+```python
+@app.command("portfolio")
+def show_portfolio(currency: Annotated[str, typer.Option("--currency", "-c")] = "usd"):
+    coin_amounts = Counter()
+
+    for transaction in CryptoTransaction.select():
+        if transaction.buy:
+            coin_amounts[transaction.coin] += transaction.amount
+        else:
+            coin_amounts[transaction.coin] -= transaction.amount
+
+    table = Table(title="Current Portfolio")
+    table.add_column("Coin", style="cyan", no_wrap=True)
+    table.add_column("Amount", style="green")
+    table.add_column("Current Value", style="magenta")
+    price_data = get_current_price(list(coin_amounts.keys()), currency)
+    total_value = 0.0
+    for coin in price_data:
+        price = price_data[coin][currency]
+        amount = coin_amounts[coin]
+        value = amount * price
+        total_value += value
+        table.add_row(coin.capitalize(), f"{amount}", f"{value:.2f} {currency.upper()}")
+
+    table.add_section()
+    table.add_row(
+        "[bold white]TOTAL[/bold white]",
+        "",
+        f"[bold yellow]{total_value:.2f} {currency.upper()}[/bold yellow]",
+    )
+
+    console = Console()
+    console.print(table)
+```
