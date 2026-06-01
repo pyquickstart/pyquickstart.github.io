@@ -7,6 +7,12 @@ import gh_codespaces from "../../../../assets/module01/gh_codespaces.png";
 import gh_codespace_ready from "../../../../assets/module01/gh_codespace_ready.png";
 import gh_codespace_extensions from "../../../../assets/module01/gh_codespace_extensions.png";
 import gh_codespace_install_python_ext from "../../../../assets/module01/gh_codespace_install_python_ext.png";
+import gh_codespace_ruff_ext from "../../../../assets/module01/gh_codespace_ruff_ext.png";
+import gh_codespace_sqlite3_editor_ext from "../../../../assets/module01/gh_codespace_sqlite3_editor_ext.png";
+import gh_codespace_settings_font_size from "../../../../assets/module01/gh_codespace_settings_font_size.png";
+import gh_codespace_settings_format from "../../../../assets/module01/gh_codespace_settings_format.png";
+import gh_codespace_stop_button from "../../../../assets/module01/gh_codespace_stop_button.png";
+import gh_codespace_default_idle_timeout from "../../../../assets/module01/gh_codespace_default_idle_timeout.png";
 
 ## GitHub Codespaces
 
@@ -58,3 +64,32 @@ This will open the Extension pane.  In the search box at the top of the pane, se
 >
 > The Python community has embraced Visual Studio Code. If filter the extensions by popularity, you will see that 4 of the top 5 extensions are Python related.  The official Microsoft Python extension has over 220 million downloads as of May 2024.  That's more that the C++, Java and C# extensions combined!
 
+Repeat the install process for the following extensions: (Click the **Trust Publisher & Install** button if prompted)
+- **Ruff** for linting and formatting Python code
+<img src={gh_codespace_ruff_ext.src} alt="Install Ruff Extension" />
+- **SQLite3 Editor** for exploring and managing SQLite databases
+<img src={gh_codespace_sqlite3_editor_ext.src} alt="Install SQLite3 Editor Extension" />
+
+A few more steps are needed to finish the setup.  Press `Ctrl + ,` (`Command + ,` on macOS) to open the Settings pane.  At the top of the pane, search for `font size`. For the `Editor: Font Size` setting, I find the default value of 14 to be small, especially for screenshots. I'll set mine 20, but you can set it to a different value.  I'll also set the `Terminal: Integrated Font Size` to the same value.
+
+<img src={gh_codespace_settings_font_size.src} alt="GitHub Codespace Settings Font Size" />
+
+One more setting to change. At the top of the Settings pane, seach for `format`. Check the box for `Editor: Format On Save`. In the `Editor: Default Formatter` setting, select the **Ruff** extension you just installed.  This will ensure that your Python code is automatically formatted using Ruff every time you save a file.
+
+<img src={gh_codespace_settings_format.src} alt="GitHub Codespace Settings Format" />
+
+Close the Settings panel and your GitHub Codespace is configured for Python development.
+
+## Conserving Your GitHub Codespace Hours
+
+Recall that you can use GitHub Codespace for up to 60 hours per month for free.  However, if you leave you GitHub Codespace running, it will consume your hours. There are however, a couple of steps you can take to conserve your hours.
+
+First, you can explicitly stop your GitHub Codespace when you are not using it.  To do this, click the **>< Codespaces** button in the lower left-hand corner of the window to open the Codespaces pane. *(1)*  This will display the Command Palette at the top on the window.  Click on **Stop Current Codespace** to stop the GitHub Codesapce. *(2)*  
+
+<img src={gh_codespace_stop_button.src} alt="Stop GitHub Codespace" />
+
+The current state will be saved and you can restart the Codespace later to pick up where you left off from the GitHub Codespaces home page.
+
+Alternatively, a GitHub Codespace will automatically stop after 30 minutes of inactivity.  You can adjust this value in the Codespaces settings.  From the GitHub site, click on your profile picture in the upper right-hand corner of the page and select **Settings** from the dropdown menu. In the left-hand sidebar, scroll down and click on **Codespaces**.  Scroll for to **Default idle timeout** and provide a value between 5 and 240 minutes (4 hours).  I find 5 minutes to be a little limiting, so I leave mine set to 10 minutes.
+
+<img src={gh_codespace_default_idle_timeout.src} alt="GitHub Codespace Default Idle Timeout" />
