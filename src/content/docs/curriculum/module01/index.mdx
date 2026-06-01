@@ -3,6 +3,11 @@ title: Onboarding
 description: Configuring GitHub Codespaces as the development environment
 ---
 
+import gh_codespaces from "../../../../assets/module01/gh_codespaces.png";
+import gh_codespace_ready from "../../../../assets/module01/gh_codespace_ready.png";
+import gh_codespace_extensions from "../../../../assets/module01/gh_codespace_extensions.png";
+import gh_codespace_install_python_ext from "../../../../assets/module01/gh_codespace_install_python_ext.png";
+
 ## GitHub Codespaces
 
 > **Note**
@@ -29,6 +34,27 @@ Let's create a GitHub Codespace!
 
 After you are logged into your GitHub account, go to [https://github.com/codespaces](https://github.com/codespaces).
 
-
-
 As one component of a GitHub Codespace is Visual Studio Code running in the browser, you can also 
+
+<img src={gh_codespaces.src} alt="GitHub Codespaces Home Page" />
+
+Here you can see there are a number of templates that are preconfigured for different application workflows such as React or .NET.  For this workshop, we will start from scratch and click on the "Use this template" button under the **Blank** template.
+
+This will provision a new GitHub Codespace and open it in a new browser tab.  This process generally takes less than a minute.  When you see this prompt in the Terminal pane at the bottom of the screen, the GitHub Codespace is ready to use.
+
+<img src={gh_codespace_ready.src} alt="GitHub Codespace Ready" />
+
+Another advantage of a GitHub Codespace using Visual Studio Code in the browser is that you can use many of the same extensions, settings and keyboard shortcuts that you would use on the desktop version. You can install extensions from inside of the GitHub Codespace.  Let's install several extension for Python development that we will use throughout the workshop.
+
+On the left-hand side of the window, in the sidebar, click on the Extensions icon.
+
+<img src={gh_codespace_extensions.src} alt="GitHub Codespace Extensions" />
+
+This will open the Extension pane.  In the search box at the top of the pane, search for `Python`.  The first result should be the official Microsoft Python extension. Click on the green **Install** button to install the extension.
+
+<img src={gh_codespace_install_python_ext.src} alt="Install Python Extension" />
+
+> **Note**
+>
+> The Python community has embraced Visual Studio Code. If filter the extensions by popularity, you will see that 4 of the top 5 extensions are Python related.  The official Microsoft Python extension has over 220 million downloads as of May 2024.  That's more that the C++, Java and C# extensions combined!
+
