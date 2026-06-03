@@ -5,6 +5,10 @@ description: All about data types
 
 ## Python Data Types
 
+> **Example Code**
+>
+> Examples from this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module02)
+
 Python is a dynamically typed programming language. Whereas statically typed programming languages such as C# and Java might require type specifiers
 
 ```java

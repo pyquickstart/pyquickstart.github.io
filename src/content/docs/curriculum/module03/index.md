@@ -5,6 +5,10 @@ description: Creating and using dictionaries and lists.
 
 ## Dictionaries
 
+> **Example Code**
+>
+> Examples from this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module03)
+
 Right now we have enough data to represent a cryptocurrency transaction stored in four variables. But what happens when we want to add another transaction? We can't reuse the variables because the current value will be lost. And adding four variables for each transacation will soon become a burden. Instead, we need a container for the four values. Every time we add a transaction, we create another container.
 
 The container that we will use is called a dictionary, or `dict` in Python. A Python dictionary is a collection of key value pairs. The key and value are separated by a colon, the pairs are separated by commas, and the whole thing is wrapped in curly braces. Here is a dictionary that represents the transaction from the previous module.

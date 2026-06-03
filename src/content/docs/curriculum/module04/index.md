@@ -3,6 +3,10 @@ title: Functions
 description: Use functions to generate transaction dictionaries for reproducibility and fewer errors
 ---
 
+> **Example Code**
+>
+> Examples from this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module02)
+
 The demo application is coming along. And right now it has some utility. But there is still too much room for error. Let's see how to take the process of creating a dictionary for a transaction and package it in a Python function.
 
 ## Functions
