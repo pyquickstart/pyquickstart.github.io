@@ -3,6 +3,10 @@ title: CLI Applications
 description: Use the `typer` package to create a CLI application with help, commands and options
 ---
 
+> **Example Code**
+>
+> Examples for this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module07). 
+
 ## Typer
 
 So far in this workshop we have built the necessary features of the cryptocurrency portfolio manager. In this module you will put them altogether in a command line interface (or CLI) application.
@@ -21,6 +25,26 @@ In your code, `import` the `typer` module and create an instance of the `Typer` 
 import typer
 
 app = typer.Typer()
+```
+
+## Python Entry Point
+
+Many programming languages require an explicity entry point, usually named **main()**.  Python does not mandate this.  When executing a Python file with the Python interpreter at the command line, if the file contains no entry point Python will simply execute the code in order starting with the first line.
+
+If you want to include an entry point, this is the syntax:
+
+```python
+if __name__ == "__main__":
+    # entry point body
+```
+
+In Python `__name__` is a special variable.  When you execute a Python file with the interpreter, the value of `__name__` is `__main__`.  
+
+Keeping this in mind, one final step remains before you can run a Typer application.  Start the `app` in the entry point.
+
+```python
+if __name__ == "__main__":
+    app()
 ```
 
 ## Commands
@@ -111,7 +135,7 @@ The command to add a buy is still the same.
 To view the portfolio value, add another function and decorate it with the `command` decorator
 
 ```python
-@app.command("view")
+@app.command("show")
 def view_portfolio(
     currency: Annotated[str, typer.Option("--currency", "-c")] = "usd"
 ):
