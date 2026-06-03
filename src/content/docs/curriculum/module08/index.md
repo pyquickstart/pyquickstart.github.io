@@ -3,6 +3,10 @@ title: Formatting Output
 description: Organize the application into modules and format the output with the Rich package
 ---
 
+> **Example Code**
+>
+> Examples for this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module08). 
+
 ## Modules
 
 In the previous modules, you used a number of Python modules. Some have been from the Python standard library while others were from 3rd party packages installed with `pip`. But you can also make your own modules. You actually already have, possibly without realizing it!
