@@ -6,6 +6,8 @@ description: Organize the application into modules and format the output with th
 import rich_print_function from "../../../../assets/module08/rich_print_function.png";
 import lookup_bitcoin from "../../../../assets/module08/lookup_bitcoin.png";
 import lookup_nullcoin from "../../../../assets/module08/lookup_nullcoin.png";
+import rich_show_table from "../../../../assets/module08/rich_show_table.png";
+import rich_table_row from "../../../../assets/module08/rich_table_row.png";
 
 > **Example Code**
 >
@@ -63,7 +65,7 @@ from peewee import (
     TextField,
 )
 
-db = SqliteDatabase("module08.sqlite")
+db = SqliteDatabase("portfolio.db")
 
 
 class CryptoTransaction(Model):
@@ -297,6 +299,8 @@ python manager.py portfolio
 
 Shows the total values of each coin in the portfolio in an easy to read table.
 
+<img src={rich_show_table.src} alt="Rich Show Table" />
+
 It would also be useful to add a row at the bottom of the `table` to show the total value of the portfolio. But we don't want to format it the same as the other rows.  Also, we can distinguish it from the other rows by placing it in a new section by calling the `add_section` method after the `for` loop.
 
 ```python
@@ -348,3 +352,5 @@ def show_portfolio(currency: Annotated[str, typer.Option("--currency", "-c")] = 
     console = Console()
     console.print(table)
 ```
+
+<img src={rich_table_row.src} alt="Rich Table Row" />
