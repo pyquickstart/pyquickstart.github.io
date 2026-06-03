@@ -73,7 +73,15 @@ coin = "bitcoin"
 url = f"https://api.coingecko.com/api/v3/simple/price?vs_currencies={currency}&ids={coin}&x_cg_demo_api_key={coingecko_api_key}"
 ```
 
-To get the data back from the API, make an HTTP GET request by passing the `url` to the `get` function in the `requests` module. This returns an object for the HTTP response. Check the response `status_code`. If it's 200 then the request succeeded. The CoinGecko API will return the data in JSON format. For the `url` we created, the JSON would look like this (the actual price will vary)
+To get the data back from the API, make an HTTP GET request by passing the `url` to the `get` function in the `requests` module. This returns an object for the HTTP response. Check the response `status_code`. If it's 200 then the request succeeded. The CoinGecko API will return the data in JSON format in the `content` field of the `response` object. 
+
+```python
+response = requests.get(url)
+if response.status_code == 200:
+    print(response.content)
+```
+
+For the `url` we created, the JSON would look like this (the actual price will vary)
 
 ```json
 { "bitcoin": { "usd": 75438 } }
