@@ -3,6 +3,10 @@ title: Formatting Output
 description: Organize the application into modules and format the output with the Rich package
 ---
 
+import rich_print_function from "../../../../assets/module08/rich_print_function.png";
+import lookup_bitcoin from "../../../../assets/module08/lookup_bitcoin.png";
+import lookup_nullcoin from "../../../../assets/module08/lookup_nullcoin.png";
+
 > **Example Code**
 >
 > Examples for this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module08). 
@@ -148,6 +152,16 @@ print(
 )
 ```
 
+If we replace the last line of the `add_transaction` function with the above code, the output of the command
+
+```bash
+python manager.py add bitcoin 0.5
+```
+
+Will look like this:
+
+<img src={rich_print_function.src} alt="Rich Print Function" />
+
 You can omit the closing tag and the style will be applied to the rest of the string. You can also use a single slash to close the tag like this `[blue]blue text[/] other color text`
 
 > **Note**
@@ -220,6 +234,8 @@ python manager.py lookup bitcoin -c gbp
 
 Will display the price of Bitcoin in Great British pounds in bold green text.
 
+<img src={lookup_bitcoin.src} alt="Lookup Bitcoin" />
+
 The command
 
 ```bash
@@ -227,6 +243,8 @@ python manager.py lookup nullcoin -c gbp
 ```
 
 Will display "not found" in bold red text.
+
+<img src={lookup_nullcoin.src} alt="Lookup Nullcoin" />
 
 ## Tables
 
