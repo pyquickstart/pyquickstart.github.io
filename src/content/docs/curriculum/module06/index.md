@@ -3,6 +3,10 @@ title: Retrieving Data from CoinGecko
 description: Use the `requests` package to get coin prices from CoinGecko
 ---
 
+> **Example Code**
+>
+> Examples for this module can be found on [GitHub](https://github.com/pyquickstart/python-qs-demos/tree/main/module06). 
+
 Our cryptocurrency portfolio manager has one major omission. There is no way to evaluate the value of the portfolio. Cryptocurrency prices are constantly changing so we need to be able to retrieve current values. CoinGecko is a company that provides such data, and you can get started for free!
 
 > **Note**
