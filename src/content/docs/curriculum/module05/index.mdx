@@ -3,6 +3,10 @@ title: Databases
 description: Store transactions in a SQLite database using the Peewee ORM
 ---
 
+import open_with from "../../../../assets/module05/open_with.png";
+import sqlite3_editor from "../../../../assets/module05/sqlite3_editor.png";
+import portfolio_db from "../../../../assets/module05/portfolio_db.png";
+
 ## Object Oriented Programming
 
 Before proceeding we need to talk a little about object oriented programming. You've been using a Python dictionary to group the data needed to represent a cryptocurrency transaction. And that's fine, but you've also had to write functions to create a new transaction and to display a transaction. Python has another construct you can use, to accomplish the same outcome.
@@ -158,3 +162,23 @@ class CryptoTransaction(Model):
 ```
 
 Run the code again and you'll see the values for each row.
+
+## Inspecting the SQLite Database
+
+In the [Onboarding](https://pyquickst.art/curriculum/module01/) module you install the **SQLite3 Editor** extension.  This extension lets you inspect and modify a SQLite database from inside of Visual Studio Code.  Open the database by right clicking on the `portfolio.db` file in the Explorer pane and selecting **Open With...** from the popup menu.
+
+<img src={open_with.src} alt="Open With Menu" />
+
+In the Command Pallette, select **SQLite3 Editor**.
+
+<img src={sqlite3_editor.src} alt="SQLite3 Editor" />
+
+This will open the database in a new tab.
+
+<img src={portfolio_db.src} alt="Portfolio Database" />
+
+The extension shows the tables in the database.  Right now there is only one table, `cryptotransaction`.  It has six columns, `id`, `coin`, `amount`, `buy`, `timestamp` and `notes`.  The `id` column is the primary key.  It is automatically added by Peewee when we created the table.  The other columns correspond to the fields in the `CryptoTransaction` model class.
+
+Notice the types of the `amount` and `buy` columns.  The `amount` column is a `real` and the `buy` column is an integer.  In SQLite a `real` is the equivalent of the Python `float` type.  SQLite does not have a boolean type so Peewee has mapped the `buy` field to an integer. A value of `True` in the model class is mapped to the integer value 1 and `False` is mapped to 0.
+
+There are three rows in the table.  These were added by the `create` method calls. Notice that only the first row has a value for the `notes` column.  The other two rows omitted a value for the `notes` field and since it is nullable, the value in the database is `NULL`.  The SQLite `NULL` value is the equivalent of the Python `None` value.  Also, all of the calls to `create` omitted a value for the `timestamp` field.  Since the default value for that field is the return value of the `datetime.date.today` function, the current date was added to each row in the `timestamp` column.
