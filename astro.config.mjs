@@ -61,7 +61,7 @@ export default defineConfig({
           slug: "curriculum/module05",
         },
         {
-          label: "Retrieving Data",
+          label: "Working with APIs",
           slug: "curriculum/module06",
         },
         {

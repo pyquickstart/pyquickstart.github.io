@@ -1,5 +1,5 @@
 ---
-title: Retrieving Data from CoinGecko
+title: Working with APIs
 description: Use the `requests` package to get coin prices from CoinGecko
 ---
 
